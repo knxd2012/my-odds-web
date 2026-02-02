@@ -177,7 +177,7 @@
         });
 
         const MAX_GOALS = 10;
-        const HOME_ADVANTAGE = -0.11;  // 減小主場優勢
+        const HOME_ADVANTAGE = 0;  // 減小主場優勢
 
         function factorial(n) {
             if (n <= 1) return 1;
@@ -187,8 +187,8 @@
         }
 
         function poissonProbs(d, totalGoals, maxGoals = MAX_GOALS) {
-            const lamH = Math.max((totalGoals + d) / 2 + HOME_ADVANTAGE, 0.01);
-            const lamA = Math.max((totalGoals - d) / 2, 0.01);
+            const lamH = Math.max((totalGoals + d) / 2 + HOME_ADVANTAGE, 0.00);
+            const lamA = Math.max((totalGoals - d) / 2, 0.00);
             let win = 0, draw = 0, loss = 0;
             for (let i = 0; i <= maxGoals; i++) {
                 const ph = Math.exp(-lamH) * Math.pow(lamH, i) / factorial(i);
@@ -248,7 +248,7 @@
             const G = Math.max(2.0, Math.min(4.0, bestG));
             
             // 全局校準：減少約0.15
-            const calibratedG = G - 0.15;
+            const calibratedG = G - 0.075;
             
             return {d: bestD, g: calibratedG, rr: rr};
         }
