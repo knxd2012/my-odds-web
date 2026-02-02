@@ -3,100 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>歐賠轉亞盤 + 預測工具</title>
+    <title>歐賠轉亞盤 + 預測工具（修正版）</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            padding: 20px; 
-            background: #f0f4f8; 
-            color: #333; 
-            margin: 0;
-        }
-        h1 { 
-            text-align: center; 
-            color: #2c3e50; 
-            margin-bottom: 24px; 
-        }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .input-group { 
-            margin: 16px 0; 
-        }
-        label { 
-            display: block; 
-            margin-bottom: 6px; 
-            font-weight: bold; 
-        }
-        input, button { 
-            width: 100%; 
-            padding: 14px; 
-            font-size: 18px; 
-            border: 1px solid #ccc; 
-            border-radius: 8px; 
-            box-sizing: border-box; 
-        }
-        button { 
-            background: #27ae60; 
-            color: white; 
-            border: none; 
-            cursor: pointer; 
-            margin-top: 20px; 
-            font-weight: bold;
-        }
-        button:hover { 
-            background: #219653; 
-        }
-        #history {
-            margin-top: 24px;
-            padding: 16px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            max-height: 400px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            line-height: 1.5;
-            font-size: 15px;
-            display: none;
-        }
-        #result {
-            margin-top: 24px;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            white-space: pre-wrap;
-            line-height: 1.6;
-            font-size: 16px;
-        }
-        .sep {
-            border-top: 1px dashed #aaa;
-            margin: 16px 0;
-        }
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f0f4f8; color: #333; margin: 0; }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 24px; }
+        .container { max-width: 520px; margin: 0 auto; }
+        .input-group { margin: 16px 0; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; }
+        input, button { width: 100%; padding: 14px; font-size: 18px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        button { background: #27ae60; color: white; border: none; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        button:hover { background: #219653; }
+        #history { margin-top: 24px; padding: 16px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-height: 420px; overflow-y: auto; white-space: pre-wrap; line-height: 1.5; font-size: 15px; display: none; }
+        #result { margin-top: 24px; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); white-space: pre-wrap; line-height: 1.6; font-size: 16px; }
+        .sep { border-top: 1px dashed #aaa; margin: 16px 0; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>歐賠轉亞盤 + 預測工具</h1>
+        <h1>歐賠轉亞盤 + 預測工具（修正版）</h1>
 
-        <div class="input-group">
-            <label>主勝賠率</label>
-            <input type="text" id="homeOdds" placeholder="例: 1.80" maxlength="5">
-        </div>
-        <div class="input-group">
-            <label>和局賠率</label>
-            <input type="text" id="drawOdds" placeholder="例: 3.50" maxlength="5">
-        </div>
-        <div class="input-group">
-            <label>客勝賠率</label>
-            <input type="text" id="awayOdds" placeholder="例: 4.00" maxlength="5">
-        </div>
-        <div class="input-group">
-            <label>總水位（預設 4.00）</label>
-            <input type="number" id="totalOdds" value="4.00" step="0.01" min="3.5" max="5">
-        </div>
+        <div class="input-group"><label>主勝賠率</label><input type="text" id="homeOdds" placeholder="例: 1.80" maxlength="5"></div>
+        <div class="input-group"><label>和局賠率</label><input type="text" id="drawOdds" placeholder="例: 3.50" maxlength="5"></div>
+        <div class="input-group"><label>客勝賠率</label><input type="text" id="awayOdds" placeholder="例: 4.00" maxlength="5"></div>
+        <div class="input-group"><label>總水位（預設 4.00）</label><input type="number" id="totalOdds" value="4.00" step="0.01" min="3.5" max="5"></div>
 
         <button onclick="calculate()">計算</button>
 
@@ -105,32 +34,21 @@
     </div>
 
     <script>
-        // 輸入輔助：自動聚焦下一個 + 清空選擇
-        const inputs = [
-            document.getElementById('homeOdds'),
-            document.getElementById('drawOdds'),
-            document.getElementById('awayOdds')
-        ];
+        const inputs = [document.getElementById('homeOdds'), document.getElementById('drawOdds'), document.getElementById('awayOdds')];
         inputs.forEach((input, idx) => {
             input.addEventListener('focus', () => input.select());
             input.addEventListener('input', () => {
                 if (input.value.length >= 4 && input.value.includes('.')) {
-                    if (idx < inputs.length - 1) {
-                        inputs[idx + 1].focus();
-                    }
+                    if (idx < inputs.length - 1) inputs[idx + 1].focus();
                 }
             });
         });
-
-        // 點擊空白處收鍵盤（手機友好）
         document.addEventListener('touchstart', e => {
-            if (!e.target.closest('input') && !e.target.closest('button')) {
-                document.activeElement.blur();
-            }
+            if (!e.target.closest('input') && !e.target.closest('button')) document.activeElement.blur();
         });
 
-        // ===================== Poisson 核心函數 =====================
         const MAX_GOALS = 7;
+        const HOME_ADV = 0.30;  // 主場優勢常數（可調 0.2~0.4）
 
         function factorial(n) {
             if (n <= 1) return 1;
@@ -140,9 +58,9 @@
         }
 
         function poissonOutcomeProbs(d, totalGoals, maxGoals = MAX_GOALS) {
-            const lamH = Math.max((totalGoals + d) / 2, 1e-9);
-            const lamA = Math.max((totalGoals - d) / 2, 1e-9);
-            let win = 0, draw = 0, loss = 0;
+            const lamH = Math.max((totalGoals + d) / 2 + HOME_ADV/2, 1e-9);   // 主場加成
+            const lamA = Math.max((totalGoals - d) / 2 - HOME_ADV/2, 1e-9);
+            let win = draw = loss = 0;
             for (let i = 0; i <= maxGoals; i++) {
                 const px = Math.exp(-lamH) * Math.pow(lamH, i) / factorial(i);
                 for (let j = 0; j <= maxGoals; j++) {
@@ -153,7 +71,7 @@
                 }
             }
             const s = win + draw + loss;
-            return s > 0 ? [win / s, draw / s, loss / s] : [1/3, 1/3, 1/3];
+            return s > 0 ? [win/s, draw/s, loss/s] : [0.333, 0.334, 0.333];
         }
 
         function linspace(start, end, count) {
@@ -164,160 +82,135 @@
 
         function fitPoissonParams(odds) {
             const inv = odds.map(o => 1 / o);
-            const sumInv = inv.reduce((a, b) => a + b, 0);
+            const sumInv = inv.reduce((a,b)=>a+b,0);
             const target = inv.map(v => v / sumInv);
-            let bestErr = Infinity, bestK = 0, bestTg = 0;
-            linspace(0, 4, 81).forEach(k => {
-                linspace(0.8, 4.5, 75).forEach(tg => {
-                    const [w, dr, l] = poissonOutcomeProbs(k, tg);
-                    const err = (w - target[0])**2 + (dr - target[1])**2 + (l - target[2])**2;
-                    if (err < bestErr) {
-                        bestErr = err;
-                        bestK = k;
-                        bestTg = tg;
-                    }
+            let bestErr = Infinity, bestTg = 2.3, bestK = 0;
+            linspace(0, 4, 61).forEach(k => {
+                linspace(1.8, 4.2, 61).forEach(tg => {   // 提高下限，避免極低 G
+                    const [w,dr,l] = poissonOutcomeProbs(k, tg);
+                    const err = (w-target[0])**2 + (dr-target[1])**2 + (l-target[2])**2;
+                    if (err < bestErr) { bestErr = err; bestK = k; bestTg = tg; }
                 });
             });
-            return { totalGoals: bestTg, rr: 1 / sumInv };
+            return { totalGoals: Math.max(2.0, bestTg), rr: 1 / sumInv };
         }
 
-        // ===================== 反推讓球（主讓客觀點） =====================
         function findFavHandicap(odds) {
-            const invSum = odds.reduce((a, o) => a + 1/o, 0);
-            const pHome = (1/odds[0]) / invSum;
-            const pAway = (1/odds[2]) / invSum;
+            const invSum = odds.reduce((a,o)=>a+1/o,0);
+            const p = [invSum ? (1/odds[0])/invSum : 0.4,
+                       invSum ? (1/odds[1])/invSum : 0.3,
+                       invSum ? (1/odds[2])/invSum : 0.3];
+            const pHome = p[0], pAway = p[2];
 
-            let pFav, sign;
-            if (pHome > pAway) {
-                pFav = pHome;
-                sign = -1;  // 主熱門 → 主讓客（負數）
-            } else {
-                pFav = pAway;
-                sign = 1;   // 客熱門 → 客讓主（正數，在主讓客觀點下為正）
-            }
+            let pFav = Math.max(pHome, pAway);
+            let sign = pHome > pAway ? -1 : 1;  // 主熱 → sign=-1 (主讓負數)
 
             const fit = fitPoissonParams(odds);
-            let g = Math.max(1.5, Math.min(4.0, fit.totalGoals)) - 0.15;
+            let g = fit.totalGoals - 0.10;  // 輕微向下校正
+            g = Math.max(2.0, Math.min(4.2, g));
 
             const maxG = g > 3.5 ? 10 : MAX_GOALS;
 
-            let low = -3.5, high = 3.5;
-            for (let i = 0; i < 60; i++) {
+            let low = -4.0, high = 4.0;
+            for (let i = 0; i < 80; i++) {  // 更多迭代
                 const mid = (low + high) / 2;
                 const [w] = poissonOutcomeProbs(mid, g, maxG);
-                // w 是主隊勝率，若 w < pFav → 主隊勝率還不夠低 → 需讓主隊更不利（d 更小/更負）
-                if (w < pFav) {
-                    high = mid;
-                } else {
+                // 目標：讓「熱門方」勝率 ≈ pFav
+                // 若目前主勝率 w 太高 → 需要加大主不利（d 變小）
+                if ((sign === -1 && w > pFav) || (sign === 1 && (1-w) > pFav)) {
                     low = mid;
+                } else {
+                    high = mid;
                 }
             }
-
-            const handicap = (low + high) / 2;
-            return [sign * handicap, g, fit.rr];
+            let est = (low + high) / 2 * sign;
+            return [est, g, fit.rr];
         }
 
-        function roundToQuarter(value) {
-            return Math.round(value * 4) / 4;
-        }
+        function roundToQuarter(v) { return Math.round(v * 4) / 4; }
 
         function selectThreeSlots(est, step = 0.25) {
-            const center = roundToQuarter(est);
-            return [center - step, center, center + step]
-                .sort((a,b) => Math.abs(a - est) - Math.abs(b - est));
+            const c = roundToQuarter(est);
+            return [c - step, c, c + step].sort((a,b) => Math.abs(a-est) - Math.abs(b-est));
         }
 
-        function getHandicapLabel(disc) {
-            const absD = Math.abs(disc);
-            const rounded = roundToQuarter(absD);
-            const labels = {
-                0.00: "平手",
-                0.25: "平手/半球",
-                0.50: "半球",
-                0.75: "半球/一球",
-                1.00: "一球",
-                1.25: "一球/球半",
-                1.50: "球半",
-                1.75: "球半/兩球",
-                2.00: "兩球",
-                2.25: "兩球/兩球半",
-                2.50: "兩球半",
-                2.75: "兩球半/三球",
-                3.00: "三球"
+        function getHandicapLabel(d) {
+            const ad = Math.abs(d);
+            const r = roundToQuarter(ad);
+            const m = {
+                0:"平手", 0.25:"平手/半球", 0.5:"半球", 0.75:"半球/一球",
+                1:"一球", 1.25:"一球/球半", 1.5:"球半", 1.75:"球半/兩球",
+                2:"兩球", 2.25:"兩球/兩球半", 2.5:"兩球半", 2.75:"兩球半/三球",
+                3:"三球", 3.25:"三球/三球半", 3.5:"三球半", 3.75:"三球半/四球",
+                4:"四球"
             };
-            let label = labels[rounded] || rounded.toFixed(2);
-            return disc > 0 ? `${label}（主讓）` : `${label}（客讓）`;
+            let label = m[r] || r.toFixed(2);
+            return d >= 0 ? label + "（主讓）" : label + "（客讓）";
         }
 
         function goalMapping(g) {
-            const rounded = roundToQuarter(g);
-            const map = {
-                2.00: "2", 2.25: "2/2.5", 2.50: "2.5", 2.75: "2.5/3",
-                3.00: "3", 3.25: "3/3.5", 3.50: "3.5", 3.75: "3.5/4"
-            };
-            return map[rounded] || rounded.toFixed(2);
+            const r = roundToQuarter(g);
+            const m = {2:"2", 2.25:"2/2.5", 2.5:"2.5", 2.75:"2.5/3", 3:"3", 3.25:"3/3.5", 3.5:"3.5", 3.75:"3.5/4", 4:"4"};
+            return m[r] || r.toFixed(2);
         }
 
-        function calcWaterRatio(cont, disc, totalOdds = 4.0) {
-            let r = (cont - disc) / 0.25;
-            r = Math.max(-1, Math.min(1, r));
-            const delta = 0.08 * totalOdds * Math.tanh(r);
-            const fav = Math.round((totalOdds / 2 - delta) * 1000) / 1000;
-            const dog = Math.round((totalOdds - fav) * 1000) / 1000;
+        function calcWaterRatio(center, disc, total=4) {
+            let ratio = (center - disc) / 0.25;
+            ratio = Math.max(-1, Math.min(1, ratio));
+            const delta = 0.085 * total * Math.tanh(ratio);
+            const fav = Math.round((total/2 - delta)*1000)/1000;
+            const dog = Math.round((total - fav)*1000)/1000;
             return [fav, dog];
         }
 
-        // ===================== 主計算函數 =====================
         function calculate() {
-            const home = parseFloat(document.getElementById('homeOdds').value) || NaN;
-            const draw = parseFloat(document.getElementById('drawOdds').value) || NaN;
-            const away = parseFloat(document.getElementById('awayOdds').value) || NaN;
-            const totalOdds = parseFloat(document.getElementById('totalOdds').value) || 4.0;
+            const h = parseFloat(document.getElementById('homeOdds').value)||NaN;
+            const d = parseFloat(document.getElementById('drawOdds').value)||NaN;
+            const a = parseFloat(document.getElementById('awayOdds').value)||NaN;
+            const total = parseFloat(document.getElementById('totalOdds').value)||4.0;
 
-            if (isNaN(home) || isNaN(draw) || isNaN(away)) {
-                document.getElementById('result').innerText = "請輸入完整三個賠率";
+            if ([h,d,a].some(isNaN)) {
+                document.getElementById('result').innerText = "請輸入完整三項賠率";
                 return;
             }
-            if ([home, draw, away].some(v => v <= 1.0 || isNaN(v))) {
-                document.getElementById('result').innerText = "每項賠率必須大於 1.0";
+            if ([h,d,a].some(v=>v<=1.01)) {
+                document.getElementById('result').innerText = "賠率必須 > 1.01";
                 return;
             }
 
-            const odds = [home, draw, away];
-            const [est, g, rr] = findFavHandicap(odds);
+            const odds = [h,d,a];
+            let [est, g, rr] = findFavHandicap(odds);
 
-            let output = `預測讓球（主讓客觀點）：${est.toFixed(3)}\n`;
-            output += `返還率 ≈ ${(rr * 100).toFixed(2)}%\n\n`;
+            let output = `預測讓球（主讓客觀點）：${est.toFixed(2)}\n`;
+            output += `返還率 ≈ ${(rr*100).toFixed(2)}%\n\n`;
 
             output += "讓球盤參考水位（三檔）:\n";
             selectThreeSlots(est).forEach(disc => {
                 const label = getHandicapLabel(disc);
-                const [upper, lower] = calcWaterRatio(est, disc, totalOdds);
-                const teamUpper = est >= 0 ? "主" : "客";
-                const teamLower = est >= 0 ? "客" : "主";
-                output += ` ${disc >= 0 ? '+' : ''}${disc.toFixed(2)}  (${label})  →  ${teamUpper} ${upper.toFixed(3)} / ${teamLower} ${lower.toFixed(3)}\n`;
+                const [up, lo] = calcWaterRatio(est, disc, total);
+                const tUp = est >= 0 ? "主" : "客";
+                const tLo = est >= 0 ? "客" : "主";
+                output += ` ${disc>=0 ? '+' : ''}${disc.toFixed(2)} (${label}) → ${tUp} ${up.toFixed(3)} / ${tLo} ${lo.toFixed(3)}\n`;
             });
 
-            const lamH = Math.max((g + est) / 2, 0.01);
-            const lamA = Math.max((g - est) / 2, 0.01);
-            output += `\n預期進球：主隊 ≈ ${lamH.toFixed(2)}   客隊 ≈ ${lamA.toFixed(2)}\n\n`;
+            const lamH = (g + est)/2 + HOME_ADV;
+            const lamA = (g - est)/2;
+            output += `\n預期進球：主隊 ≈ ${lamH.toFixed(2)}　客隊 ≈ ${lamA.toFixed(2)}\n\n`;
 
-            output += `預測總進球數 G ≈ ${g.toFixed(3)}\n\n`;
+            output += `預測總進球數 G ≈ ${g.toFixed(2)}\n\n`;
             output += "大小盤參考水位（三檔）:\n";
-            selectThreeSlots(g).forEach(gDisc => {
-                const label = goalMapping(gDisc);
-                const [big, small] = calcWaterRatio(g, gDisc, totalOdds);
-                output += ` ${gDisc.toFixed(2)}  (${label})  → 大 ${big.toFixed(3)} / 小 ${small.toFixed(3)}\n`;
+            selectThreeSlots(g).forEach(gc => {
+                const label = goalMapping(gc);
+                const [big, small] = calcWaterRatio(g, gc, total);
+                output += ` ${gc.toFixed(2)} (${label}) → 大 ${big.toFixed(3)} / 小 ${small.toFixed(3)}\n`;
             });
 
-            // 加入歷史紀錄
-            const historyDiv = document.getElementById('history');
-            const timestamp = new Date().toLocaleString('zh-HK', {hour12: false});
-            const record = `=== ${timestamp} ===\n${output}\n`;
-            historyDiv.innerHTML = record + historyDiv.innerHTML;
-            historyDiv.style.display = 'block';
+            // 歷史紀錄
+            const hist = document.getElementById('history');
+            const ts = new Date().toLocaleString('zh-HK',{hour12:false});
+            hist.innerHTML = `=== ${ts} ===\n${output}\n${hist.innerHTML}`;
+            hist.style.display = 'block';
 
-            // 顯示當前結果
             document.getElementById('result').innerText = output;
         }
     </script>
